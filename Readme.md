@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг»
 
 * Студент: [Viktor Zdorovcew](https://up.htmlacademy.ru/javascript/23/user/1507737).
-* Наставник: `Неизвестно`.
+* Наставник: [Юрий Белобородов](https://htmlacademy.ru/profile/id514591).
 
 ---
 
