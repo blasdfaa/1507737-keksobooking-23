@@ -1,24 +1,13 @@
 const getRandomNumber = (min, max) => {
-  if (min < 0 && max > 0) {
-    return 'Числа не должны быть отрициательными!';
-  } else if (max < min) {
-    return 'Максимальное число не должно быть меньше минимального!';
-  }
-
-  const result = min + Math.random() * (max + 1 - min);
-  return Math.floor(result);
+  const result = Math.floor(min + Math.random() * (max + 1 - min));
+  return Math.abs(result);
 };
 
 const getFractionalNumber = (min, max, range) => {
-  if (min < 0 && max > 0) {
-    return 'Числа не должны быть отрициательными!';
-  } else if (max < min) {
-    return 'Максимальное число не должно быть меньше минимального!';
-  }
-
   const result = min + Math.random() * (max + 1 - min);
-  return result.toFixed(range);
+  return Math.abs(result.toFixed(range));
 };
 
-getRandomNumber(1, 3);
-getFractionalNumber(1.1, 3.5, 1);
+getRandomNumber(1, 5);
+getRandomNumber(-3, 5);
+getFractionalNumber(1.1, 3.5, 100);
