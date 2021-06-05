@@ -1,11 +1,18 @@
+const NUMBER_OF_OBJECTS = 10;
+const MIN_AVATAR_NUMBER = 1;
+const MAX_AVATAR_NUMBER = 8;
+const MIN_LOCATION_LAT = 35.65000;
+const MAX_LOCATION_LAT = 35.70000;
+const MIN_LOCATION_LNG = 139.70000;
+const MAX_LOCATION_LNG = 139.80000;
+const CHECK_IN = ['12:00', '13:00', '14:00'];
+const CHECK_OUT = ['12:00', '13:00', '14:00'];
+const TYPE_HOUSE = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
 const FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-
 const PHOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg', 'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg',
 ];
-
-const NUMBER_OF_OBJECTS = 10;
 
 const getRandomNumber = (min, max) => {
   const result = Math.floor(min + Math.random() * (max + 1 - min));
@@ -36,31 +43,47 @@ const getRandomArray = (arr) => {
   return result;
 };
 
-const getAvatarUrl = () => `img/avatars/user0${getRandomNumber(1, 8)}.png`;
+const getAuthorData = () => {
+  const result = {
+    avatar: `img/avatars/user0${getRandomNumber(MIN_AVATAR_NUMBER, MAX_AVATAR_NUMBER)}.png`,
+  };
+  return result;
+};
 
-const createOfferData = () => ({
-  author: {
-    avatar: getAvatarUrl(),
-  },
-  offer: {
+const getOfferData = () => {
+  const result = {
     title: 'Милая, уютная квартирка в центре Токио',
-    address: `${getRandomNumber(1, 110)}, ${getRandomNumber(11, 222)}`,
-    price: getRandomNumber(1, 10),
-    type: 'palace',
-    rooms: getRandomNumber(1, 5),
+    address: `${getRandomPositiveFloat(MIN_LOCATION_LAT, MAX_LOCATION_LAT, 5)}, ${getRandomPositiveFloat(MIN_LOCATION_LNG, MAX_LOCATION_LNG, 5)}`,
+    price: getRandomNumber(1, 10000),
+    type: getRandomArrayElement(TYPE_HOUSE),
+    rooms: getRandomNumber(1, 10),
     guests: getRandomNumber(1, 7),
-    checkin: '12:00',
-    checkout: '13:00',
+    checkin: getRandomArrayElement(CHECK_IN),
+    checkout: getRandomArrayElement(CHECK_OUT),
     features: getRandomArray(FEATURES),
-    description: 'Продается теплая, солнечная, очень светлая 3-комнатная квартира, которая находится на 8 этаже 12этажного дома; дом имеет 2 входа с разных сторон.',
+    description: 'Апартаменты Asakusa Shinobi House расположены в 400 м от храма Сэнсо-дзи и в 1 км от телевизионной башни Tokyo Skytree. К услугам гостей оформленные в японском стиле апартаменты в традиционном японском стиле.',
     photos: getRandomArray(PHOTOS),
-    location: {
-      lat: getRandomPositiveFloat(35.65, 35.70, 5),
-      lng: getRandomPositiveFloat(139.70, 139.80, 5),
-    },
-  },
-});
+  };
+  return result;
+};
 
-const createOffer = new Array(NUMBER_OF_OBJECTS).fill(null).map(() => createOfferData());
+const getLocationData = () => {
+  const result = {
+    lat: getRandomPositiveFloat(MIN_LOCATION_LAT, MAX_LOCATION_LAT, 5),
+    lng: getRandomPositiveFloat(MIN_LOCATION_LNG, MAX_LOCATION_LNG, 5),
+  };
+  return result;
+};
+
+const getOfferObj = () => {
+  const result = {
+    author: getAuthorData(),
+    offer: getOfferData(),
+    location: getLocationData(),
+  };
+  return result;
+};
+
+const createOffer = new Array(NUMBER_OF_OBJECTS).fill('').map(() => getOfferObj());
 
 createOffer;
