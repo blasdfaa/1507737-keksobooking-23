@@ -27,14 +27,12 @@ const getRandomPositiveFloat = (min, max, float = 1) => {
 const getRandomArrayElement = (arr) => arr[getRandomNumber(0, arr.length - 1)];
 
 const mixedArray = (arr) => {
-  arr.forEach((item) => {
-    const temp = item;
-    const randomEl = getRandomArrayElement(arr);
-
-    item = arr[randomEl];
-    arr[randomEl] = temp;
-  });
-  return arr;
+  const copyArray = arr.slice();
+  for (let i = copyArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1)); // случайный индекс от 0 до i
+    [copyArray[i], copyArray[j]] = [copyArray[j], copyArray[i]];
+  }
+  return copyArray;
 };
 
 const getRandomArray = (arr) => {
@@ -43,47 +41,35 @@ const getRandomArray = (arr) => {
   return result;
 };
 
-const getAuthorData = () => {
-  const result = {
-    avatar: `img/avatars/user0${getRandomNumber(MIN_AVATAR_NUMBER, MAX_AVATAR_NUMBER)}.png`,
-  };
-  return result;
-};
+const getAuthorData = () => ({
+  avatar: `img/avatars/user0${getRandomNumber(MIN_AVATAR_NUMBER, MAX_AVATAR_NUMBER)}.png`,
+});
 
-const getOfferData = () => {
-  const result = {
-    title: 'Милая, уютная квартирка в центре Токио',
-    address: `${getRandomPositiveFloat(MIN_LOCATION_LAT, MAX_LOCATION_LAT, 5)}, ${getRandomPositiveFloat(MIN_LOCATION_LNG, MAX_LOCATION_LNG, 5)}`,
-    price: getRandomNumber(1, 10000),
-    type: getRandomArrayElement(TYPE_HOUSE),
-    rooms: getRandomNumber(1, 10),
-    guests: getRandomNumber(1, 7),
-    checkin: getRandomArrayElement(CHECK_IN),
-    checkout: getRandomArrayElement(CHECK_OUT),
-    features: getRandomArray(FEATURES),
-    description: 'Апартаменты Asakusa Shinobi House расположены в 400 м от храма Сэнсо-дзи и в 1 км от телевизионной башни Tokyo Skytree. К услугам гостей оформленные в японском стиле апартаменты в традиционном японском стиле.',
-    photos: getRandomArray(PHOTOS),
-  };
-  return result;
-};
+const getOfferData = () => ({
+  title: 'Милая, уютная квартирка в центре Токио',
+  address: `${getRandomPositiveFloat(MIN_LOCATION_LAT, MAX_LOCATION_LAT, 5)}, ${getRandomPositiveFloat(MIN_LOCATION_LNG, MAX_LOCATION_LNG, 5)}`,
+  price: getRandomNumber(1, 10000),
+  type: getRandomArrayElement(TYPE_HOUSE),
+  rooms: getRandomNumber(1, 10),
+  guests: getRandomNumber(1, 7),
+  checkin: getRandomArrayElement(CHECK_IN),
+  checkout: getRandomArrayElement(CHECK_OUT),
+  features: getRandomArray(FEATURES),
+  description: 'Апартаменты Asakusa Shinobi House расположены в 400 м от храма Сэнсо-дзи и в 1 км от телевизионной башни Tokyo Skytree. К услугам гостей оформленные в японском стиле апартаменты в традиционном японском стиле.',
+  photos: getRandomArray(PHOTOS),
+});
 
-const getLocationData = () => {
-  const result = {
-    lat: getRandomPositiveFloat(MIN_LOCATION_LAT, MAX_LOCATION_LAT, 5),
-    lng: getRandomPositiveFloat(MIN_LOCATION_LNG, MAX_LOCATION_LNG, 5),
-  };
-  return result;
-};
+const getLocationData = () => ({
+  lat: getRandomPositiveFloat(MIN_LOCATION_LAT, MAX_LOCATION_LAT, 5),
+  lng: getRandomPositiveFloat(MIN_LOCATION_LNG, MAX_LOCATION_LNG, 5),
+});
 
-const getOfferObj = () => {
-  const result = {
-    author: getAuthorData(),
-    offer: getOfferData(),
-    location: getLocationData(),
-  };
-  return result;
-};
+const getOfferObj = () => ({
+  author: getAuthorData(),
+  offer: getOfferData(),
+  location: getLocationData(),
+});
 
-const createOffer = new Array(NUMBER_OF_OBJECTS).fill('').map(() => getOfferObj());
+const offerArray = new Array(NUMBER_OF_OBJECTS).fill('').map(() => getOfferObj());
 
-createOffer;
+offerArray;
