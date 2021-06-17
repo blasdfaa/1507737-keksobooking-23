@@ -21,8 +21,9 @@ const mixedArray = (arr) => {
 
 const getRandomArray = (arr) => {
   const newArray = mixedArray(arr);
-  const result = newArray.slice(0, getRandomNumber(1, newArray.length));
-  return result;
+  return newArray.slice(0, getRandomNumber(1, newArray.length));
 };
 
-export { getRandomNumber, getRandomPositiveFloat, getRandomArrayElement, getRandomArray };
+const hideBlock = (block) => block.classList.add('hidden');
+
+export { getRandomNumber, getRandomPositiveFloat, getRandomArrayElement, getRandomArray, hideBlock };
