@@ -24,4 +24,6 @@ const getRandomArray = (arr) => {
   return newArray.slice(0, getRandomNumber(1, newArray.length));
 };
 
-export { getRandomNumber, getRandomPositiveFloat, getRandomArrayElement, getRandomArray };
+const hideBlock = (block) => block.classList.add('hidden');
+
+export { getRandomNumber, getRandomPositiveFloat, getRandomArrayElement, getRandomArray, hideBlock };
