@@ -13,7 +13,7 @@ const cardTemplate = document.querySelector('#card')
   .querySelector('.popup');
 
 const makeFeatureItems = (features) => features.map((feature) => `<li class="popup__feature popup__feature--${feature}"></li>`).join('');
-const makePhotoItems = (photos) => photos.map((feature) => `<li class="popup__feature popup__feature--${feature}"></li>`).join('');
+const makePhotoItems = (photos) => photos.map((photo) => `<img src="${photo}" class="popup__photo" width="45" height="40" alt="Фотография жилья">`).join('');
 
 export const renderCardsList = (dataCard) => {
   const cardsFragment = document.createDocumentFragment();
