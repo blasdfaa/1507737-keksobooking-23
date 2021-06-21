@@ -1,4 +1,5 @@
 import { maxLengthCheck } from './utils.js';
+import { getLocationData } from './mock-data.js';
 
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
@@ -23,7 +24,7 @@ const filterFormElements = Array.from(filterForm.children);
 const titleInput = adForm.querySelector('#title');
 const houseTypeSelect = adForm.querySelector('#type');
 const priceInput = adForm.querySelector('#price');
-// const addressInput = adForm.querySelector('#address');
+const addressInput = adForm.querySelector('#address');
 const timeInSelect = adForm.querySelector('#timein');
 const timeOutSelect = adForm.querySelector('#timeout');
 const roomNumberSelect = adForm.querySelector('#room_number');
@@ -58,9 +59,10 @@ const syncPriceWithType = (event) => {
 
 // Адрес
 
-/* const disableAddressInput = () => {
+const disableAddressInput = () => {
   addressInput.disabled = true;
-}; */
+  addressInput.value = `${getLocationData().lat}, ${getLocationData().lng}`;
+};
 
 // Время заезда и Время выезда
 
@@ -117,6 +119,7 @@ const disableForm = () => {
   filterFormElements.forEach((element) => element.disabled = true);
 
   removeFormEventListeners();
+  disableAddressInput();
 };
 
 const activateForm = () => {
@@ -127,6 +130,7 @@ const activateForm = () => {
   filterFormElements.forEach((element) => element.disabled = false);
 
   AddFormEventListeners();
+  disableAddressInput();
 };
 
 export { disableForm, activateForm };

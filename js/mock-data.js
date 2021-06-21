@@ -47,4 +47,4 @@ const getOfferObj = () => ({
 
 const createOffersArray = () => new Array(NUMBER_OF_OBJECTS).fill('').map(() => getOfferObj());
 
-export { createOffersArray, getOfferData };
+export { createOffersArray, getOfferData, getLocationData };
