@@ -26,4 +26,10 @@ const getRandomArray = (arr) => {
 
 const hideBlock = (block) => block.classList.add('hidden');
 
-export { getRandomNumber, getRandomPositiveFloat, getRandomArrayElement, getRandomArray, hideBlock };
+const maxLengthCheck = (input) => {
+  if (input.value.length > input.maxLength) {
+    input.value = input.value.slice(0, input.maxLength);
+  }
+};
+
+export { getRandomNumber, getRandomPositiveFloat, getRandomArrayElement, getRandomArray, hideBlock, maxLengthCheck };

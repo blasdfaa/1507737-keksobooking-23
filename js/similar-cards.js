@@ -1,11 +1,11 @@
 import { hideBlock } from './utils.js';
 
-const TYPE_CATEGORY = {
-  palace: 'Дворец',
-  flat: 'Квартира',
-  house: 'Дом',
-  bungalow: 'Бунгало',
-  hotel: 'Отель',
+const typeCategory = {
+  PALACE: 'Дворец',
+  FLAT: 'Квартира',
+  HOUSE: 'Дом',
+  BUNGALOW: 'Бунгало',
+  HOTEL: 'Отель',
 };
 
 const cardTemplate = document.querySelector('#card')
@@ -35,7 +35,7 @@ export const renderCardsList = (dataCard) => {
     offer.title ? title.textContent = offer.title : hideBlock(title);
     offer.address ? address.textContent = offer.address : hideBlock(address);
     offer.price ? price.textContent = `${offer.price} ₽/ночь` : hideBlock(price);
-    offer.type ? type.textContent = TYPE_CATEGORY[offer.type] : hideBlock(type);
+    offer.type ? type.textContent = typeCategory[offer.type.toUpperCase()] : hideBlock(type);
     offer.rooms ? capacity.textContent = `${offer.rooms} комнаты для ${offer.guests} гостей` : hideBlock(capacity);
     offer.checkin ? time.textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}` : hideBlock(time);
     offer.features ? features.innerHTML = `${makeFeatureItems(offer.features)}` : hideBlock(features);
