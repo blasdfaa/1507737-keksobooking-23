@@ -59,8 +59,7 @@ const syncPriceWithType = (event) => {
 
 // Адрес
 
-const disableAddressInput = () => {
-  addressInput.disabled = true;
+const сompleteAddressInput = () => {
   addressInput.value = `${getLocationData().lat}, ${getLocationData().lng}`;
 };
 
@@ -93,7 +92,7 @@ const changeCapacityRooms = (event) => {
 
 // Управление состоянием формы
 
-const AddFormEventListeners = () => {
+const addFormEventListeners = () => {
   titleInput.addEventListener('input', checkTitleValid);
   priceInput.addEventListener('input', validatePriceInput);
   houseTypeSelect.addEventListener('change', syncPriceWithType);
@@ -119,7 +118,7 @@ const disableForm = () => {
   filterFormElements.forEach((element) => element.disabled = true);
 
   removeFormEventListeners();
-  disableAddressInput();
+  сompleteAddressInput();
 };
 
 const activateForm = () => {
@@ -129,8 +128,8 @@ const activateForm = () => {
   filterForm.classList.remove('ad-form--disable');
   filterFormElements.forEach((element) => element.disabled = false);
 
-  AddFormEventListeners();
-  disableAddressInput();
+  addFormEventListeners();
+  сompleteAddressInput();
 };
 
 export { disableForm, activateForm };
