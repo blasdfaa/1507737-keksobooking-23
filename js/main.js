@@ -1,4 +1,1 @@
-import { disableForm, activateForm } from './form.js';
-
-disableForm();
-activateForm();
+import { map } from './map.js';
