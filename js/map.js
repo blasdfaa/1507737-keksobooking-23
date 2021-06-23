@@ -3,7 +3,7 @@ import { createOffersArray } from './mock-data.js';
 import { disableForm, activateForm, сompleteAddressInput } from './form.js';
 
 const offersArray = createOffersArray();
-const defalutCoords = {
+const defaultCoords = {
   LAT: 35.65160,
   LNG: 139.74908,
 };
@@ -13,8 +13,8 @@ disableForm();
 export const map = L.map('map-canvas')
   .on('load', () => activateForm())
   .setView({
-    lat: defalutCoords.LAT,
-    lng: defalutCoords.LNG,
+    lat: defaultCoords.LAT,
+    lng: defaultCoords.LNG,
   }, 10);
 
 L.tileLayer(
@@ -31,8 +31,8 @@ const defaultMarkerIcon = L.icon({
 
 const defaultMarker = L.marker(
   {
-    lat: defalutCoords.LAT,
-    lng: defalutCoords.LNG,
+    lat: defaultCoords.LAT,
+    lng: defaultCoords.LNG,
   },
   {
     draggable: true,
@@ -56,7 +56,7 @@ defaultMarker.addTo(map);
 // };
 
 const getMarkerCoords = () => {
-  сompleteAddressInput(`${defalutCoords.LAT}, ${defalutCoords.LNG}`);
+  сompleteAddressInput(`${defaultCoords.LAT}, ${defaultCoords.LNG}`);
 
   defaultMarker.on('drag', (event) => {
     const coords = event.target.getLatLng();
