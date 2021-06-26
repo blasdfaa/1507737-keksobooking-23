@@ -1,5 +1,4 @@
 import { maxLengthCheck } from './utils.js';
-import { getLocationData } from './mock-data.js';
 
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
@@ -59,8 +58,8 @@ const syncPriceWithType = (event) => {
 
 // Адрес
 
-const сompleteAddressInput = () => {
-  addressInput.value = `${getLocationData().lat}, ${getLocationData().lng}`;
+const сompleteAddressInput = (coords) => {
+  addressInput.value = coords;
 };
 
 // Время заезда и Время выезда
@@ -132,4 +131,4 @@ const activateForm = () => {
   сompleteAddressInput();
 };
 
-export { disableForm, activateForm };
+export { disableForm, activateForm, сompleteAddressInput };
