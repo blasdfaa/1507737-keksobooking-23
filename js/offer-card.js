@@ -8,8 +8,7 @@ const typeCategory = {
   HOTEL: 'Отель',
 };
 
-const renderCard = (offerData) => {
-  const { author, offer } = offerData;
+export const renderCard = (author, offer) => {
   const cardTemplate = document.querySelector('#card')
     .content
     .querySelector('.popup');
@@ -43,5 +42,3 @@ const renderCard = (offerData) => {
 
   return card;
 };
-
-export { renderCard };

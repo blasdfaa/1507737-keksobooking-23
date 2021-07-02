@@ -1,3 +1,4 @@
-import { map } from './map.js';
+import './map.js';
+import './map-filter.js';
 
-map;
+

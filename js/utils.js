@@ -32,4 +32,20 @@ const maxLengthCheck = (input) => {
   }
 };
 
-export { getRandomNumber, getRandomPositiveFloat, getRandomArrayElement, getRandomArray, hideBlock, maxLengthCheck };
+const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
+
+const isOutsideEvent = (evt) => !evt.target.matches('html');
+
+export const closeOnEsc = (evt, element) => {
+  if (isEscEvent(evt)) {
+    element.remove();
+  }
+};
+
+export const closeOnOutsideClick = (evt, element) => {
+  if (isOutsideEvent(evt)) {
+    element.remove();
+  }
+};
+
+export { getRandomNumber, getRandomPositiveFloat, getRandomArrayElement, getRandomArray, hideBlock, maxLengthCheck, isEscEvent, isOutsideEvent };
