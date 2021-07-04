@@ -15,6 +15,9 @@ export const openSuccessAlert = () => {
 
   setTimeout(() => {
     alertSuccess.remove();
+
+    window.removeEventListener('click', (evt) => closeOnOutsideClick(evt, alertSuccess));
+    window.removeEventListener('keydown', (evt) => closeOnEsc(evt, alertSuccess));
   }, SUCCESS_ALERT_SHOW_TIME);
 };
 
@@ -31,5 +34,9 @@ export const openFailureAlert = (message) => {
 
   setTimeout(() => {
     alertFailure.remove();
+
+    window.removeEventListener('click', (evt) => closeOnOutsideClick(evt, alertFailure));
+    window.removeEventListener('keydown', (evt) => closeOnEsc(evt, alertFailure));
   }, FAILURE_ALERT_SHOW_TIME);
 };
+

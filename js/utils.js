@@ -3,12 +3,12 @@ const getRandomNumber = (min, max) => {
   return Math.abs(result);
 };
 
-const getRandomPositiveFloat = (min, max, float = 1) => {
+export const getRandomPositiveFloat = (min, max, float = 1) => {
   const result = Math.abs(Math.random() * (max - min) + min);
   return result.toFixed(float);
 };
 
-const getRandomArrayElement = (arr) => arr[getRandomNumber(0, arr.length - 1)];
+export const getRandomArrayElement = (arr) => arr[getRandomNumber(0, arr.length - 1)];
 
 const mixedArray = (arr) => {
   const copyArray = arr.slice();
@@ -19,14 +19,14 @@ const mixedArray = (arr) => {
   return copyArray;
 };
 
-const getRandomArray = (arr) => {
+export const getRandomArray = (arr) => {
   const newArray = mixedArray(arr);
   return newArray.slice(0, getRandomNumber(1, newArray.length));
 };
 
-const hideBlock = (block) => block.classList.add('hidden');
+export const hideBlock = (block) => block.classList.add('hidden');
 
-const maxLengthCheck = (input) => {
+export const maxLengthCheck = (input) => {
   if (input.value.length > input.maxLength) {
     input.value = input.value.slice(0, input.maxLength);
   }
@@ -47,5 +47,3 @@ export const closeOnOutsideClick = (evt, element) => {
     element.remove();
   }
 };
-
-export { getRandomNumber, getRandomPositiveFloat, getRandomArrayElement, getRandomArray, hideBlock, maxLengthCheck, isEscEvent, isOutsideEvent };
