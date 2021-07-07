@@ -1,4 +1,4 @@
-import { disableFilterForm } from './map-filter.js';
+import { adFormReset } from './form.js';
 
 export const postData = (onSuccess, onFailure, body) => {
   fetch(
@@ -11,7 +11,8 @@ export const postData = (onSuccess, onFailure, body) => {
   )
     .then((res) => {
       if (res.ok) {
-        onSuccess('Ваше объявление<br>успешно размещено!');
+        onSuccess();
+        adFormReset();
       } else {
         onFailure('Ошибка размещения объявления');
       }
@@ -19,7 +20,7 @@ export const postData = (onSuccess, onFailure, body) => {
     .catch(() => onFailure('Не удалось отправить форму. Попробуйте ещё раз'));
 };
 
-export const getData = (onSuccess, onFailure) => {
+export const fetchDataOffers = (onSuccess) => {
   fetch(
     'https://23.javascript.pages.academy/keksobooking/data',
     {
@@ -34,10 +35,6 @@ export const getData = (onSuccess, onFailure) => {
 
       throw new Error(`${res.status} ${res.statusText}`);
     })
-    .then((offers) => onSuccess(offers))
-    .catch(() => {
-      onFailure(),
-      disableFilterForm();
-    });
+    .then((offers) => onSuccess(offers));
 };
 

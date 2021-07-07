@@ -2,7 +2,6 @@ import { openFailureAlert, openSuccessAlert } from './alert.js';
 import { postData } from './api.js';
 import { maxLengthCheck } from './utils.js';
 
-
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
 const typeCategoryPriceValue = {
@@ -19,7 +18,7 @@ const ROOM_CAPACITY_VALUES = {
   100: [0],
 };
 const adForm = document.querySelector('.ad-form');
-const adFormElements = Array.from(adForm.children);
+const adFormElements = [...adForm.children];
 
 const titleInput = adForm.querySelector('#title');
 const houseTypeSelect = adForm.querySelector('#type');
@@ -56,7 +55,9 @@ const syncPriceWithType = (evt) => {
 };
 
 export const сompleteAddressInput = (coords) => {
-  addressInput.value = coords;
+  if (coords) {
+    addressInput.value = coords;
+  }
 };
 
 const changeTimeInInput = (evt) => {
@@ -108,6 +109,10 @@ const removeFormEventListeners = () => {
   timeInSelect.removeEventListener('change', changeTimeInInput);
   timeOutSelect.removeEventListener('change', changeTimeOutInput);
   roomNumberSelect.removeEventListener('change', changeCapacityRooms);
+};
+
+export const adFormReset = () => {
+  adForm.reset();
 };
 
 export const disableForm = () => {

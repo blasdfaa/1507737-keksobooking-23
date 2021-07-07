@@ -1,47 +1,40 @@
-import { renderCard } from './offer-card.js';
+import { createCard } from './offer-card.js';
 import { disableForm, activateForm, сompleteAddressInput } from './form.js';
-import { sortOffers } from './map-filter.js';
-
-const defaultCoords = {
-  LAT: 35.65160,
-  LNG: 139.74908,
-};
-const MARKER_MAX_COUNTS = 10;
+import { getFilterData } from './map-filter.js';
+import { mixedArray } from './utils.js';
+import { debounce } from './utils.js';
 
 disableForm();
 
-const defaultMarkerIcon = L.icon({
-  iconUrl: 'img/main-pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
-});
+const RERENDER_DELAY = 500;
+const DEFAULT_COUNT_OF_MARKER = 10;
+const filterForm = document.querySelector('.map__filters');
+
+const defaultMapSettings = {
+  coords: {
+    LAT: 35.65160,
+    LNG: 139.74908,
+  },
+  MAP_ZOOM: 10,
+  MARKER_ICON: L.icon({
+    iconUrl: 'img/main-pin.svg',
+    iconSize: [52, 52],
+    iconAnchor: [26, 52],
+  }),
+};
 
 const defaultMarker = L.marker(
   {
-    lat: defaultCoords.LAT,
-    lng: defaultCoords.LNG,
+    lat: defaultMapSettings.coords.LAT,
+    lng: defaultMapSettings.coords.LNG,
   },
   {
     draggable: true,
-    icon: defaultMarkerIcon,
+    icon: defaultMapSettings.MARKER_ICON,
   },
 );
 
-// const returnMarkerOnDefault = () => {
-//   defaultMarker.setLatLng({
-//     lat: defalutCoords.LAT,
-//     lng: defalutCoords.LNG,
-//   });
-
-//   map.setView({
-//     lat: defalutCoords.LAT,
-//     lng: defalutCoords.LNG,
-//   }, 10);
-// };
-
 const setCoordsOnInput = () => {
-  сompleteAddressInput(`${defaultCoords.LAT}, ${defaultCoords.LNG}`);
-
   defaultMarker.on('drag', (evt) => {
     const { lat, lng } = evt.target.getLatLng();
 
@@ -55,9 +48,9 @@ const map = L.map('map-canvas')
     setCoordsOnInput();
   })
   .setView({
-    lat: defaultCoords.LAT,
-    lng: defaultCoords.LNG,
-  }, 10);
+    lat: defaultMapSettings.coords.LAT,
+    lng: defaultMapSettings.coords.LNG,
+  }, defaultMapSettings.MAP_ZOOM);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -67,38 +60,64 @@ L.tileLayer(
 
 defaultMarker.addTo(map);
 
-export const markerGroup = L.layerGroup().addTo(map);
+const markerGroup = L.layerGroup().addTo(map);
 
 export const createMarker = (offerData) => {
-  offerData
-    .slice()
-    .filter(sortOffers)
-    .slice(0, MARKER_MAX_COUNTS)
-    .forEach(({ author, offer, location }) => {
-      const markerIcon = L.icon({
-        iconUrl: 'img/pin.svg',
-        iconSize: [40, 40],
-        iconAnchor: [20, 40],
-      });
+  markerGroup.clearLayers();
+  offerData.forEach(({ author, offer, location }) => {
+    const { lat, lng } = location;
+    const markerIcon = L.icon({
+      iconUrl: 'img/pin.svg',
+      iconSize: [40, 40],
+      iconAnchor: [20, 40],
+    });
 
-      const marker = L.marker(
+    const marker = L.marker(
+      {
+        lat,
+        lng,
+      },
+      {
+        icon: markerIcon,
+        riseOnHover: true,
+      },
+    );
+    marker.addTo(markerGroup)
+      .bindPopup(
+        createCard(author, offer),
         {
-          lat: location.lat,
-          lng: location.lng,
-        },
-        {
-          icon: markerIcon,
-          riseOnHover: true,
+          keepInView: true,
         },
       );
 
-      marker
-        .addTo(markerGroup)
-        .bindPopup(
-          renderCard(author, offer),
-          {
-            keepInView: true,
-          },
-        );
-    });
+  });
 };
+
+export const renderCards = (offerData) => {
+  const cardData = mixedArray(offerData)
+    .slice()
+    .slice(0, DEFAULT_COUNT_OF_MARKER);
+  createMarker(cardData);
+
+  const onFilterChange = () => {
+    const offerFilter = getFilterData(cardData);
+
+    createMarker(offerFilter);
+  };
+
+  filterForm.addEventListener('change', debounce(onFilterChange, RERENDER_DELAY));
+};
+
+export const returnMarkerOnDefault = () => {
+  defaultMarker.setLatLng({
+    lat: defaultMapSettings.coords.LAT,
+    lng: defaultMapSettings.coords.LNG,
+  });
+
+  map.setView({
+    lat: defaultMapSettings.coords.LAT,
+    lng: defaultMapSettings.coords.LNG,
+  }, defaultMapSettings.MAP_ZOOM);
+};
+
+

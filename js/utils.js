@@ -10,7 +10,7 @@ export const getRandomPositiveFloat = (min, max, float = 1) => {
 
 export const getRandomArrayElement = (arr) => arr[getRandomNumber(0, arr.length - 1)];
 
-const mixedArray = (arr) => {
+export const mixedArray = (arr) => {
   const copyArray = arr.slice();
   for (let i = copyArray.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1)); // случайный индекс от 0 до i
@@ -46,4 +46,34 @@ export const closeOnOutsideClick = (evt, element) => {
   if (isOutsideEvent(evt)) {
     element.remove();
   }
+};
+
+export const debounce = (cb, delay) => {
+  let timer;
+
+  return function (...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      cb.apply(this, args);
+    }, delay);
+  };
+};
+
+export const setFilePreview = (fileInput, imgElement, typeOptions) => {
+  fileInput.addEventListener('change', () => {
+    const file = fileInput.files[0];
+    const fileName = file.name.toLowerCase();
+
+    const isFormatValid = typeOptions.some((item) => fileName.endsWith(item));
+
+    if (isFormatValid) {
+      const reader = new FileReader();
+
+      reader.addEventListener('load', () => {
+        imgElement.src = reader.result;
+      });
+
+      reader.readAsDataURL(file);
+    }
+  });
 };

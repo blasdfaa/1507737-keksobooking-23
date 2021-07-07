@@ -8,10 +8,8 @@ const typeCategory = {
   HOTEL: 'Отель',
 };
 
-export const renderCard = (author, offer) => {
-  const cardTemplate = document.querySelector('#card')
-    .content
-    .querySelector('.popup');
+export const createCard = (author, offer) => {
+  const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
 
   const makeFeatureItems = (featureList) => featureList.map((feature) => `<li class="popup__feature popup__feature--${feature}"></li>`).join('');
   const makePhotoItems = (photoList) => photoList.map((photo) => `<img src="${photo}" class="popup__photo" width="45" height="40" alt="Фотография жилья">`).join('');
