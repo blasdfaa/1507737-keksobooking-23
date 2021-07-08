@@ -1,4 +1,4 @@
-import { hideBlock } from './utils.js';
+import { declOfNum, hideBlock } from './utils.js';
 
 const typeCategory = {
   PALACE: 'Дворец',
@@ -32,7 +32,7 @@ export const createCard = (author, offer) => {
   offer.address ? address.textContent = offer.address : hideBlock(address);
   offer.price ? price.textContent = `${offer.price} ₽/ночь` : hideBlock(price);
   offer.type ? type.textContent = typeCategory[offer.type.toUpperCase()] : hideBlock(type);
-  offer.rooms ? capacity.textContent = `${offer.rooms} комнаты для ${offer.guests} гостей` : hideBlock(capacity);
+  offer.rooms ? capacity.textContent = `${offer.rooms} ${declOfNum(offer.rooms, ['комната', 'комнаты', 'комнат'])} для ${offer.guests} гостей` : hideBlock(capacity);
   offer.checkin ? time.textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}` : hideBlock(time);
   offer.features ? features.innerHTML = `${makeFeatureItems(offer.features)}` : hideBlock(features);
   offer.description ? description.textContent = offer.description : hideBlock(description);
