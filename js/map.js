@@ -1,10 +1,11 @@
 import { createCard } from './offer-card.js';
 import { disableForm, activateForm, сompleteAddressInput } from './form.js';
-import { getFilterData } from './map-filter.js';
+import { activateFilterForm, disableFilterForm, getFilterData } from './map-filter.js';
 import { mixedArray } from './utils.js';
 import { debounce } from './utils.js';
 
 disableForm();
+disableFilterForm();
 
 const RERENDER_DELAY = 500;
 const DEFAULT_COUNT_OF_MARKER = 10;
@@ -45,6 +46,7 @@ const setCoordsOnInput = () => {
 const map = L.map('map-canvas')
   .on('load', () => {
     activateForm(),
+    activateFilterForm();
     setCoordsOnInput();
   })
   .setView({
