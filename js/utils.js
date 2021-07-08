@@ -32,21 +32,9 @@ export const maxLengthCheck = (input) => {
   }
 };
 
-const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
+export const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
-const isOutsideEvent = (evt) => !evt.target.matches('html');
-
-export const closeOnEsc = (evt, element) => {
-  if (isEscEvent(evt)) {
-    element.remove();
-  }
-};
-
-export const closeOnOutsideClick = (evt, element) => {
-  if (isOutsideEvent(evt)) {
-    element.remove();
-  }
-};
+export const isOutsideEvent = (evt) => !evt.target.matches('html');
 
 export const debounce = (cb, delay) => {
   let timer;
