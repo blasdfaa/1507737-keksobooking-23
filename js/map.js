@@ -1,106 +1,125 @@
-import { renderCard } from './offer-card.js';
-import { createOffersArray } from './mock-data.js';
+import { createCard } from './offer-card.js';
 import { disableForm, activateForm, сompleteAddressInput } from './form.js';
-
-const offersArray = createOffersArray();
-const defaultCoords = {
-  LAT: 35.65160,
-  LNG: 139.74908,
-};
+import { activateFilterForm, disableFilterForm, getFilterData } from './map-filter.js';
+import { mixedArray } from './utils.js';
+import { debounce } from './utils.js';
 
 disableForm();
+disableFilterForm();
 
-export const map = L.map('map-canvas')
-  .on('load', () => activateForm())
-  .setView({
-    lat: defaultCoords.LAT,
-    lng: defaultCoords.LNG,
-  }, 10);
+const RERENDER_DELAY = 500;
+const DEFAULT_COUNT_OF_MARKER = 10;
+const filterForm = document.querySelector('.map__filters');
 
-L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  })
-  .addTo(map);
-
-const defaultMarkerIcon = L.icon({
-  iconUrl: 'img/main-pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
-});
+const defaultMapSettings = {
+  coords: {
+    LAT: 35.65160,
+    LNG: 139.74908,
+  },
+  MAP_ZOOM: 10,
+  MARKER_ICON: L.icon({
+    iconUrl: 'img/main-pin.svg',
+    iconSize: [52, 52],
+    iconAnchor: [26, 52],
+  }),
+};
 
 const defaultMarker = L.marker(
   {
-    lat: defaultCoords.LAT,
-    lng: defaultCoords.LNG,
+    lat: defaultMapSettings.coords.LAT,
+    lng: defaultMapSettings.coords.LNG,
   },
   {
     draggable: true,
-    icon: defaultMarkerIcon,
+    icon: defaultMapSettings.MARKER_ICON,
   },
 );
 
+const setCoordsOnInput = () => {
+  defaultMarker.on('drag', (evt) => {
+    const { lat, lng } = evt.target.getLatLng();
+
+    сompleteAddressInput(`${lat.toFixed(5)}, ${lng.toFixed(5)}`);
+  });
+};
+
+const map = L.map('map-canvas')
+  .on('load', () => {
+    activateForm(),
+    activateFilterForm();
+    setCoordsOnInput();
+  })
+  .setView({
+    lat: defaultMapSettings.coords.LAT,
+    lng: defaultMapSettings.coords.LNG,
+  }, defaultMapSettings.MAP_ZOOM);
+
+L.tileLayer(
+  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  }).addTo(map);
+
 defaultMarker.addTo(map);
 
+const markerGroup = L.layerGroup().addTo(map);
 
-// const returnMarkerOnDefault = () => {
-//   defaultMarker.setLatLng({
-//     lat: defalutCoords.LAT,
-//     lng: defalutCoords.LNG,
-//   });
+export const createMarker = (offerData) => {
+  markerGroup.clearLayers();
+  offerData.forEach(({ author, offer, location }) => {
+    const { lat, lng } = location;
+    const markerIcon = L.icon({
+      iconUrl: 'img/pin.svg',
+      iconSize: [40, 40],
+      iconAnchor: [20, 40],
+    });
 
-//   map.setView({
-//     lat: defalutCoords.LAT,
-//     lng: defalutCoords.LNG,
-//   }, 10);
-// };
-
-const getMarkerCoords = () => {
-  сompleteAddressInput(`${defaultCoords.LAT}, ${defaultCoords.LNG}`);
-
-  defaultMarker.on('drag', (event) => {
-    const coords = event.target.getLatLng();
-    const lat = coords.lat.toFixed(5);
-    const lng = coords.lng.toFixed(5);
-
-    сompleteAddressInput(`${lat}, ${lng}`);
-  });
-};
-
-getMarkerCoords();
-
-const createMarkerGroup = L.layerGroup().addTo(map);
-const createMarker = (offerData) => {
-  const { location } = offerData;
-
-  const markerIcon = L.icon({
-    iconUrl: 'img/pin.svg',
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
-  });
-
-  const marker = L.marker(
-    {
-      lat: location.lat,
-      lng: location.lng,
-    },
-    {
-      icon: markerIcon,
-      riseOnHover: true,
-    },
-  );
-
-  marker
-    .addTo(createMarkerGroup)
-    .bindPopup(
-      renderCard(offerData),
+    const marker = L.marker(
       {
-        keepInView: true,
+        lat,
+        lng,
+      },
+      {
+        icon: markerIcon,
+        riseOnHover: true,
       },
     );
+    marker.addTo(markerGroup)
+      .bindPopup(
+        createCard(author, offer),
+        {
+          keepInView: true,
+        },
+      );
+
+  });
 };
 
-offersArray.forEach((offer) => {
-  createMarker(offer);
-});
+export const renderCards = (offerData) => {
+  const cardData = mixedArray(offerData)
+    .slice()
+    .slice(0, DEFAULT_COUNT_OF_MARKER);
+  createMarker(cardData);
+
+  const onFilterChange = () => {
+    const offerFilter = getFilterData(cardData);
+
+    createMarker(offerFilter);
+  };
+
+  filterForm.addEventListener('change', debounce(onFilterChange, RERENDER_DELAY));
+};
+
+export const returnMarkerOnDefault = () => {
+  defaultMarker.setLatLng({
+    lat: defaultMapSettings.coords.LAT,
+    lng: defaultMapSettings.coords.LNG,
+  });
+
+  map.setView({
+    lat: defaultMapSettings.coords.LAT,
+    lng: defaultMapSettings.coords.LNG,
+  }, defaultMapSettings.MAP_ZOOM);
+};
+
 

@@ -1,3 +1,7 @@
-import { map } from './map.js';
+import './file-preview.js';
+import { fetchDataOffers } from './api.js';
+import { renderCards } from './map.js';
 
-map;
+fetchDataOffers((offers) => {
+  renderCards(offers);
+});

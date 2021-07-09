@@ -382,7 +382,8 @@ fieldset {
 
 .ad-form__element input:hover,
 .ad-form__element select:hover,
-.ad-form__element textarea:hover {
+.ad-form__element textarea:hover,
+.ad-form__element input:not(:placeholder-shown):invalid:hover {
   border-color: #ffaa99;
 }
 
@@ -392,6 +393,27 @@ fieldset {
   outline: none;
   -webkit-box-shadow: 0 0 2px 2px #ff6547;
           box-shadow: 0 0 2px 2px #ff6547;
+}
+
+.ad-form__element input:not(:placeholder-shown):invalid {
+  outline: none;
+  -webkit-box-shadow: 0 0 2px 2px #ff2a00;
+          box-shadow: 0 0 2px 2px #ff2a00;
+}
+
+.ad-form__element input:not(:placeholder-shown):valid {
+  outline: none;
+  -webkit-box-shadow: 0 0 2px 2px #77f373;
+          box-shadow: 0 0 2px 2px #77f373;
+}
+
+.ad-form__element input:not(:placeholder-shown):valid:hover,
+.ad-form__element input:not(:placeholder-shown):valid:focus {
+  border-color: #09ff00;
+}
+
+.ad-form__element input[name="address"] {
+  pointer-events: none;
 }
 
 .ad-form__element--time {
@@ -580,6 +602,17 @@ fieldset {
   height: 70px;
 
   background-color: #e4e4de;
+  border-radius: 5px;
+
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-right: 10px;
+  padding: 0 15px;
+  text-align: center;
   border-radius: 5px;
 }
 

@@ -1,3 +1,5 @@
+import { openFailureAlert, openSuccessAlert } from './alert.js';
+import { postData } from './api.js';
 import { maxLengthCheck } from './utils.js';
 
 const MIN_TITLE_LENGTH = 30;
@@ -16,9 +18,7 @@ const ROOM_CAPACITY_VALUES = {
   100: [0],
 };
 const adForm = document.querySelector('.ad-form');
-const filterForm = document.querySelector('.map__filters');
-const adFormElements = Array.from(adForm.children);
-const filterFormElements = Array.from(filterForm.children);
+const adFormElements = [...adForm.children];
 
 const titleInput = adForm.querySelector('#title');
 const houseTypeSelect = adForm.querySelector('#type');
@@ -43,43 +43,37 @@ const checkTitleValid = () => {
   }
 };
 
-// Цена за ночь
-
 const validatePriceInput = () => {
   maxLengthCheck(priceInput);
 };
 
-const syncPriceWithType = (event) => {
-  const target = event.target;
+const syncPriceWithType = (evt) => {
+  const target = evt.target;
 
   priceInput.min = typeCategoryPriceValue[target.value.toUpperCase()];
   priceInput.placeholder = typeCategoryPriceValue[target.value.toUpperCase()];
 };
 
-// Адрес
-
-const сompleteAddressInput = (coords) => {
-  addressInput.value = coords;
+export const сompleteAddressInput = (coords) => {
+  if (coords) {
+    addressInput.value = coords;
+  }
 };
 
-// Время заезда и Время выезда
-
-const changeTimeInInput = (event) => {
-  const target = event.target;
+const changeTimeInInput = (evt) => {
+  const target = evt.target;
 
   timeOutSelect.value = target.value;
 };
 
-const changeTimeOutInput = (event) => {
-  const target = event.target;
+const changeTimeOutInput = (evt) => {
+  const target = evt.target;
 
   timeInSelect.value = target.value;
 };
 
-// Количество мест/комнат
-
-const changeCapacityRooms = (event) => {
-  const target = event.target;
+const changeCapacityRooms = (evt) => {
+  const target = evt.target;
   const capacitySelectItems = capacitySelect.querySelectorAll('option');
 
   capacitySelectItems.forEach((item) => item.disabled = true);
@@ -89,7 +83,15 @@ const changeCapacityRooms = (event) => {
   });
 };
 
-// Управление состоянием формы
+adForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+
+  postData(
+    () => openSuccessAlert(),
+    () => openFailureAlert('Не удалось отправить форму. Попробуйте ещё раз'),
+    new FormData(adForm),
+  );
+});
 
 const addFormEventListeners = () => {
   titleInput.addEventListener('input', checkTitleValid);
@@ -109,26 +111,22 @@ const removeFormEventListeners = () => {
   roomNumberSelect.removeEventListener('change', changeCapacityRooms);
 };
 
-const disableForm = () => {
+export const adFormReset = () => {
+  adForm.reset();
+};
+
+export const disableForm = () => {
   adForm.classList.add('ad-form--disable');
   adFormElements.forEach((element) => element.disabled = true);
-
-  filterForm.classList.add('map__filters--disable');
-  filterFormElements.forEach((element) => element.disabled = true);
 
   removeFormEventListeners();
   сompleteAddressInput();
 };
 
-const activateForm = () => {
+export const activateForm = () => {
   adForm.classList.remove('ad-form--disable');
   adFormElements.forEach((element) => element.disabled = false);
-
-  filterForm.classList.remove('ad-form--disable');
-  filterFormElements.forEach((element) => element.disabled = false);
 
   addFormEventListeners();
   сompleteAddressInput();
 };
-
-export { disableForm, activateForm, сompleteAddressInput };
