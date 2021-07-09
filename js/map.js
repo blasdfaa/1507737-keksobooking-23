@@ -82,6 +82,7 @@ export const createMarker = (offerData) => {
       {
         icon: markerIcon,
         riseOnHover: true,
+        closePopupOnClick: false,
       },
     );
     marker.addTo(markerGroup)
@@ -91,7 +92,6 @@ export const createMarker = (offerData) => {
           keepInView: true,
         },
       );
-
   });
 };
 
