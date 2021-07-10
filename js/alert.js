@@ -1,4 +1,3 @@
-import { adFormReset } from './form.js';
 import { isEscEvent, isOutsideEvent } from './utils.js';
 
 let ALERT_SHOW_TIME = 2000;
@@ -9,7 +8,6 @@ export const openAlert = (type, message) => {
 
   if (type === 'error') {
     alert.querySelector('.error__message').textContent = message;
-    alert.querySelector('.error__button').addEventListener('click', adFormReset);
 
     ALERT_SHOW_TIME = 5000;
   }

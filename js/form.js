@@ -1,5 +1,7 @@
 import { openAlert } from './alert.js';
 import { postData } from './api.js';
+import { filterFormReset } from './map-filter.js';
+import { initMarkers, returnMarkerOnDefault } from './map.js';
 import { maxLengthCheck } from './utils.js';
 
 const MIN_TITLE_LENGTH = 30;
@@ -83,12 +85,22 @@ const changeCapacityRooms = (evt) => {
   });
 };
 
+export const adFormReset = () => {
+  adForm.reset();
+};
+
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
 
   postData(
-    () => openAlert('success'),
-    () => openAlert('error'),
+    () => {
+      openAlert('success'),
+      adFormReset(),
+      filterFormReset(),
+      returnMarkerOnDefault(),
+      initMarkers();
+    },
+    () => openAlert('error', 'Ошибка размещения объявления'),
     new FormData(adForm),
   );
 });
@@ -109,10 +121,6 @@ const removeFormEventListeners = () => {
   timeInSelect.removeEventListener('change', changeTimeInInput);
   timeOutSelect.removeEventListener('change', changeTimeOutInput);
   roomNumberSelect.removeEventListener('change', changeCapacityRooms);
-};
-
-export const adFormReset = () => {
-  adForm.reset();
 };
 
 export const disableForm = () => {
