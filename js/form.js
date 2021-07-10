@@ -1,4 +1,4 @@
-import { openFailureAlert, openSuccessAlert } from './alert.js';
+import { openAlert } from './alert.js';
 import { postData } from './api.js';
 import { maxLengthCheck } from './utils.js';
 
@@ -87,8 +87,8 @@ adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
 
   postData(
-    () => openSuccessAlert(),
-    () => openFailureAlert('Не удалось отправить форму. Попробуйте ещё раз'),
+    () => openAlert('success'),
+    () => openAlert('error'),
     new FormData(adForm),
   );
 });

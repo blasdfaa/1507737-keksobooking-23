@@ -14,13 +14,13 @@ export const postData = (onSuccess, onFailure, body) => {
         onSuccess();
         adFormReset();
       } else {
-        onFailure('Ошибка размещения объявления');
+        onFailure('error', 'Ошибка размещения объявления');
       }
     })
-    .catch(() => onFailure('Не удалось отправить форму. Попробуйте ещё раз'));
+    .catch(() => onFailure('error', 'Не удалось отправить форму. Попробуйте ещё раз'));
 };
 
-export const fetchDataOffers = (onSuccess) => {
+export const fetchDataOffers = (onSuccess, onFailure) => {
   fetch(
     'https://23.javascript.pages.academy/keksobooking/data',
     {
@@ -35,6 +35,7 @@ export const fetchDataOffers = (onSuccess) => {
 
       throw new Error(`${res.status} ${res.statusText}`);
     })
-    .then((offers) => onSuccess(offers));
+    .then((offers) => onSuccess(offers))
+    .catch(() => onFailure('error', 'Не удалось отправить форму. Попробуйте ещё раз'));
 };
 
