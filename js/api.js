@@ -1,5 +1,3 @@
-import { adFormReset } from './form.js';
-
 export const postData = (onSuccess, onFailure, body) => {
   fetch(
     'https://23.javascript.pages.academy/keksobooking',
@@ -12,12 +10,11 @@ export const postData = (onSuccess, onFailure, body) => {
     .then((res) => {
       if (res.ok) {
         onSuccess();
-        adFormReset();
       } else {
-        onFailure('error', 'Ошибка размещения объявления');
+        onFailure();
       }
     })
-    .catch(() => onFailure('error', 'Не удалось отправить форму. Попробуйте ещё раз'));
+    .catch(() => onFailure());
 };
 
 export const fetchDataOffers = (onSuccess, onFailure) => {
@@ -31,11 +28,11 @@ export const fetchDataOffers = (onSuccess, onFailure) => {
     .then((res) => {
       if (res.ok) {
         return res.json();
+      } else {
+        onFailure();
       }
-
-      throw new Error(`${res.status} ${res.statusText}`);
     })
     .then((offers) => onSuccess(offers))
-    .catch(() => onFailure('error', 'Не удалось отправить форму. Попробуйте ещё раз'));
+    .catch(() => onFailure());
 };
 
