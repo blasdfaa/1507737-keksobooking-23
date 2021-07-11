@@ -1,5 +1,5 @@
 import { createCard } from './offer-card.js';
-import { disableForm, activateForm, сompleteAddressInput } from './form.js';
+import { activateForm, disableForm, сompleteAddressInput } from './form.js';
 import { activateFilterForm, disableFilterForm, getFilterData } from './map-filter.js';
 import { mixedArray } from './utils.js';
 import { debounce } from './utils.js';
@@ -38,7 +38,7 @@ const defaultMarker = L.marker(
   },
 );
 
-const setCoordsOnInput = () => {
+export const setCoordsOnInput = () => {
   сompleteAddressInput(`${defaultMapSettings.coords.LAT}, ${defaultMapSettings.coords.LNG}`);
 
   defaultMarker.on('drag', (evt) => {
@@ -50,11 +50,6 @@ const setCoordsOnInput = () => {
 };
 
 const map = L.map('map-canvas')
-  .on('load', () => {
-    activateForm(),
-    activateFilterForm();
-    setCoordsOnInput();
-  })
   .setView({
     lat: defaultMapSettings.coords.LAT,
     lng: defaultMapSettings.coords.LNG,
@@ -113,14 +108,16 @@ export const renderCards = (offerData) => {
   filterForm.addEventListener('change', debounce(applyFilter, RERENDER_DELAY));
 };
 
-export const initMarkers = () => {
-  fetchDataOffers(
-    (offers) => {
-      renderCards(offers);
-    },
-    () => openAlert('error', 'Ошибка при загрузке объявлений'),
-  );
-};
+fetchDataOffers(
+  (offers) => {
+    renderCards(offers);
+    activateFilterForm();
+    activateForm();
+    setCoordsOnInput();
+  },
+  () => openAlert('error', 'Ошибка при загрузке объявлений'),
+);
+
 
 export const returnMarkerOnDefault = () => {
   defaultMarker.setLatLng({

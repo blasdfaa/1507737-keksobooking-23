@@ -1,7 +1,7 @@
 import { openAlert } from './alert.js';
 import { postData } from './api.js';
 import { filterFormReset } from './map-filter.js';
-import { initMarkers, returnMarkerOnDefault } from './map.js';
+import { returnMarkerOnDefault } from './map.js';
 import { maxLengthCheck } from './utils.js';
 
 const MIN_TITLE_LENGTH = 30;
@@ -97,8 +97,7 @@ adForm.addEventListener('submit', (evt) => {
       openAlert('success'),
       adFormReset(),
       filterFormReset(),
-      returnMarkerOnDefault(),
-      initMarkers();
+      returnMarkerOnDefault();
     },
     () => openAlert('error', 'Ошибка размещения объявления'),
     new FormData(adForm),

@@ -17,7 +17,7 @@ export const postData = (onSuccess, onFailure, body) => {
     .catch(() => onFailure());
 };
 
-export const fetchDataOffers = (onSuccess, onFailure) => {
+export const fetchDataOffers = async (onSuccess, onFailure) => {
   fetch(
     'https://23.javascript.pages.academy/keksobooking/data',
     {
