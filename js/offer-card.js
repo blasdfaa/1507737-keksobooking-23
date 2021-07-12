@@ -1,4 +1,4 @@
-import { declOfNum, hideBlock } from './utils.js';
+import { hideBlock } from './utils.js';
 
 const typeCategory = {
   PALACE: 'Дворец',
@@ -10,7 +10,6 @@ const typeCategory = {
 
 export const createCard = (author, offer) => {
   const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
-  const NUMERAL_CARD_WORDS = ['комната', 'комнаты', 'комнат'];
 
   const makeFeatureItems = (featureList) => featureList.map((feature) => `<li class="popup__feature popup__feature--${feature}"></li>`).join('');
   const makePhotoItems = (photoList) => photoList.map((photo) => `<img src="${photo}" class="popup__photo" width="45" height="40" alt="Фотография жилья">`).join('');
@@ -33,7 +32,7 @@ export const createCard = (author, offer) => {
   offer.address ? address.textContent = offer.address : hideBlock(address);
   offer.price ? price.textContent = `${offer.price} ₽/ночь` : hideBlock(price);
   offer.type ? type.textContent = typeCategory[offer.type.toUpperCase()] : hideBlock(type);
-  offer.rooms ? capacity.textContent = `${offer.rooms} ${declOfNum(offer.rooms, NUMERAL_CARD_WORDS)} для ${offer.guests} гостей` : hideBlock(capacity);
+  offer.rooms ? capacity.textContent = `${offer.rooms} комнаты для ${offer.guests} гостей` : hideBlock(capacity);
   offer.checkin ? time.textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}` : hideBlock(time);
   offer.features ? features.innerHTML = `${makeFeatureItems(offer.features)}` : hideBlock(features);
   offer.description ? description.textContent = offer.description : hideBlock(description);

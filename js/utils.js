@@ -10,7 +10,7 @@ export const getRandomPositiveFloat = (min, max, float = 1) => {
 
 export const getRandomArrayElement = (arr) => arr[getRandomNumber(0, arr.length - 1)];
 
-export const mixedArray = (arr) => {
+export const shuffleArray = (arr) => {
   const copyArray = arr.slice();
   for (let i = copyArray.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1)); // случайный индекс от 0 до i
@@ -20,13 +20,13 @@ export const mixedArray = (arr) => {
 };
 
 export const getRandomArray = (arr) => {
-  const newArray = mixedArray(arr);
+  const newArray = shuffleArray(arr);
   return newArray.slice(0, getRandomNumber(1, newArray.length));
 };
 
 export const hideBlock = (block) => block.classList.add('hidden');
 
-export const maxLengthCheck = (input) => {
+export const checkMaxLength = (input) => {
   if (input.value.length > input.maxLength) {
     input.value = input.value.slice(0, input.maxLength);
   }
@@ -64,9 +64,4 @@ export const setFilePreview = (fileInput, imgElement, typeOptions) => {
       reader.readAsDataURL(file);
     }
   });
-};
-
-export const declOfNum = (number, words) => {
-  const cases = [2, 0, 1, 1, 1, 2];
-  return words[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
 };
