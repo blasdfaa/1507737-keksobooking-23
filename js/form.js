@@ -1,8 +1,9 @@
 import { openAlert } from './alert.js';
 import { postData } from './api.js';
-import { filterFormReset } from './map-filter.js';
-import { returnMarkerOnDefault } from './map.js';
-import { maxLengthCheck } from './utils.js';
+import { resetFileInputs } from './file-preview.js';
+import { resetFilterForm } from './map-filter.js';
+import { loadMarkersOnMap, returnMarkerOnDefault } from './map.js';
+import { checkMaxLength } from './utils.js';
 
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
@@ -33,7 +34,7 @@ const capacitySelect = adForm.querySelector('#capacity');
 
 // Заголовок объявления
 
-const checkTitleValid = () => {
+const onTitleInputValid = () => {
   const valueLength = titleInput.value.length;
 
   if (valueLength < MIN_TITLE_LENGTH) {
@@ -45,11 +46,11 @@ const checkTitleValid = () => {
   }
 };
 
-const validatePriceInput = () => {
-  maxLengthCheck(priceInput);
+const onPriceInputValid = () => {
+  checkMaxLength(priceInput);
 };
 
-const syncPriceWithType = (evt) => {
+const onHouseTypeSelectSetPrice = (evt) => {
   const target = evt.target;
 
   priceInput.min = typeCategoryPriceValue[target.value.toUpperCase()];
@@ -62,30 +63,33 @@ export const сompleteAddressInput = (coords) => {
   }
 };
 
-const changeTimeInInput = (evt) => {
+const onTimeInSelectChange = (evt) => {
   const target = evt.target;
 
   timeOutSelect.value = target.value;
 };
 
-const changeTimeOutInput = (evt) => {
+const onTimeOutSelectChange = (evt) => {
   const target = evt.target;
 
   timeInSelect.value = target.value;
 };
 
-const changeCapacityRooms = (evt) => {
+const onNumberRoomsSelectChange = (evt) => {
   const target = evt.target;
   const capacitySelectItems = capacitySelect.querySelectorAll('option');
 
-  capacitySelectItems.forEach((item) => item.disabled = true);
+  capacitySelectItems.forEach((item) => {
+    item.disabled = true;
+  });
+
   ROOM_CAPACITY_VALUES[target.value].forEach((item) => {
     capacitySelect.querySelector(`option[value="${item}"]`).disabled = false;
     capacitySelect.value = item;
   });
 };
 
-export const adFormReset = () => {
+export const resetAdForm = () => {
   adForm.reset();
 };
 
@@ -94,10 +98,12 @@ adForm.addEventListener('submit', (evt) => {
 
   postData(
     () => {
-      openAlert('success'),
-      adFormReset(),
-      filterFormReset(),
-      returnMarkerOnDefault();
+      resetAdForm(),
+      resetFilterForm(),
+      returnMarkerOnDefault(),
+      loadMarkersOnMap(),
+      resetFileInputs(),
+      openAlert('success');
     },
     () => openAlert('error', 'Ошибка размещения объявления'),
     new FormData(adForm),
@@ -105,26 +111,29 @@ adForm.addEventListener('submit', (evt) => {
 });
 
 const addFormEventListeners = () => {
-  titleInput.addEventListener('input', checkTitleValid);
-  priceInput.addEventListener('input', validatePriceInput);
-  houseTypeSelect.addEventListener('change', syncPriceWithType);
-  timeInSelect.addEventListener('change', changeTimeInInput);
-  timeOutSelect.addEventListener('change', changeTimeOutInput);
-  roomNumberSelect.addEventListener('change', changeCapacityRooms);
+  titleInput.addEventListener('input', onTitleInputValid);
+  priceInput.addEventListener('input', onPriceInputValid);
+  houseTypeSelect.addEventListener('change', onHouseTypeSelectSetPrice);
+  timeInSelect.addEventListener('change', onTimeInSelectChange);
+  timeOutSelect.addEventListener('change', onTimeOutSelectChange);
+  roomNumberSelect.addEventListener('change', onNumberRoomsSelectChange);
 };
 
 const removeFormEventListeners = () => {
-  titleInput.removeEventListener('input', checkTitleValid);
-  priceInput.removeEventListener('input', validatePriceInput);
-  houseTypeSelect.removeEventListener('change', syncPriceWithType);
-  timeInSelect.removeEventListener('change', changeTimeInInput);
-  timeOutSelect.removeEventListener('change', changeTimeOutInput);
-  roomNumberSelect.removeEventListener('change', changeCapacityRooms);
+  titleInput.removeEventListener('input', onTitleInputValid);
+  priceInput.removeEventListener('input', onPriceInputValid);
+  houseTypeSelect.removeEventListener('change', onHouseTypeSelectSetPrice);
+  timeInSelect.removeEventListener('change', onTimeInSelectChange);
+  timeOutSelect.removeEventListener('change', onTimeOutSelectChange);
+  roomNumberSelect.removeEventListener('change', onNumberRoomsSelectChange);
 };
 
 export const disableForm = () => {
   adForm.classList.add('ad-form--disable');
-  adFormElements.forEach((element) => element.disabled = true);
+
+  adFormElements.forEach((element) => {
+    element.disabled = true;
+  });
 
   removeFormEventListeners();
   сompleteAddressInput();
@@ -132,7 +141,10 @@ export const disableForm = () => {
 
 export const activateForm = () => {
   adForm.classList.remove('ad-form--disable');
-  adFormElements.forEach((element) => element.disabled = false);
+
+  adFormElements.forEach((element) => {
+    element.disabled = false;
+  });
 
   addFormEventListeners();
   сompleteAddressInput();

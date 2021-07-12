@@ -1,3 +1,5 @@
+import { setCoordsOnInput } from './map.js';
+
 const filterForm = document.querySelector('.map__filters');
 const filterFormElements = [...filterForm.children];
 
@@ -76,16 +78,23 @@ export const getFilterData = (offers) => offers.filter((item) =>
   filterByFeatures(item),
 );
 
-export const filterFormReset = () => {
+export const resetFilterForm = () => {
   filterForm.reset();
+  setCoordsOnInput();
 };
 
 export const disableFilterForm = () => {
   filterForm.classList.add('map__filters--disable');
-  filterFormElements.forEach((element) => element.disabled = true);
+
+  filterFormElements.forEach((element) => {
+    element.disabled = true;
+  });
 };
 
 export const activateFilterForm = () => {
   filterForm.classList.remove('map__filters--disable');
-  filterFormElements.forEach((element) => element.disabled = false);
+
+  filterFormElements.forEach((element) => {
+    element.disabled = false;
+  });
 };

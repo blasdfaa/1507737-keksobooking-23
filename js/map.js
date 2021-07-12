@@ -1,18 +1,22 @@
 import { createCard } from './offer-card.js';
 import { activateForm, disableForm, сompleteAddressInput } from './form.js';
 import { activateFilterForm, disableFilterForm, getFilterData } from './map-filter.js';
-import { mixedArray } from './utils.js';
+import { shuffleArray } from './utils.js';
 import { debounce } from './utils.js';
 import { openAlert } from './alert.js';
 import { fetchDataOffers } from './api.js';
 
-disableForm();
-disableFilterForm();
-
 const RERENDER_DELAY = 500;
 const DEFAULT_COUNT_OF_MARKER = 10;
+const MARKER_ICON_WIDTH = 40;
+const MARKER_ICON_HEIGHT = 40;
+const MARKER_ICON_ANCHOR_X = 20;
+const MARKER_ICON_ANCHOR_Y = 40;
 
 const filterForm = document.querySelector('.map__filters');
+
+disableForm();
+disableFilterForm();
 
 const defaultMapSettings = {
   coords: {
@@ -50,6 +54,10 @@ export const setCoordsOnInput = () => {
 };
 
 const map = L.map('map-canvas')
+  .on('load', () => {
+    activateForm(),
+    setCoordsOnInput();
+  })
   .setView({
     lat: defaultMapSettings.coords.LAT,
     lng: defaultMapSettings.coords.LNG,
@@ -72,8 +80,8 @@ export const createMarker = (offerData) => {
     const { lat, lng } = location;
     const markerIcon = L.icon({
       iconUrl: 'img/pin.svg',
-      iconSize: [40, 40],
-      iconAnchor: [20, 40],
+      iconSize: [MARKER_ICON_WIDTH, MARKER_ICON_HEIGHT],
+      iconAnchor: [MARKER_ICON_ANCHOR_X, MARKER_ICON_ANCHOR_Y],
     });
 
     const marker = L.marker(
@@ -97,7 +105,7 @@ export const createMarker = (offerData) => {
 };
 
 export const renderCards = (offerData) => {
-  const cardData = mixedArray(offerData).slice(0, DEFAULT_COUNT_OF_MARKER);
+  const cardData = shuffleArray(offerData).slice(0, DEFAULT_COUNT_OF_MARKER);
   createMarker(cardData);
 
   const applyFilter = () => {
@@ -108,16 +116,17 @@ export const renderCards = (offerData) => {
   filterForm.addEventListener('change', debounce(applyFilter, RERENDER_DELAY));
 };
 
-fetchDataOffers(
-  (offers) => {
-    renderCards(offers);
-    activateFilterForm();
-    activateForm();
-    setCoordsOnInput();
-  },
-  () => openAlert('error', 'Ошибка при загрузке объявлений'),
-);
+export const loadMarkersOnMap = () => {
+  fetchDataOffers(
+    (offers) => {
+      renderCards(offers);
+      activateFilterForm();
+    },
+    () => openAlert('error', 'Ошибка при загрузке объявлений'),
+  );
+};
 
+loadMarkersOnMap();
 
 export const returnMarkerOnDefault = () => {
   defaultMarker.setLatLng({
