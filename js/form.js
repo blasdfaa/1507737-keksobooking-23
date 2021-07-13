@@ -31,6 +31,7 @@ const timeInSelect = adForm.querySelector('#timein');
 const timeOutSelect = adForm.querySelector('#timeout');
 const roomNumberSelect = adForm.querySelector('#room_number');
 const capacitySelect = adForm.querySelector('#capacity');
+const formResetButton = adForm.querySelector('.ad-form__reset');
 
 // Заголовок объявления
 
@@ -89,8 +90,15 @@ const onNumberRoomsSelectChange = (evt) => {
   });
 };
 
-export const resetAdForm = () => {
+export const onResetForms = (evt) => {
+  evt.preventDefault();
+
   adForm.reset();
+  resetFilterForm();
+  resetFileInputs();
+
+  returnMarkerOnDefault();
+  loadMarkersOnMap();
 };
 
 adForm.addEventListener('submit', (evt) => {
@@ -98,11 +106,7 @@ adForm.addEventListener('submit', (evt) => {
 
   postData(
     () => {
-      resetAdForm(),
-      resetFilterForm(),
-      returnMarkerOnDefault(),
-      loadMarkersOnMap(),
-      resetFileInputs(),
+      onResetForms(),
       openAlert('success');
     },
     () => openAlert('error', 'Ошибка размещения объявления'),
@@ -117,6 +121,7 @@ const addFormEventListeners = () => {
   timeInSelect.addEventListener('change', onTimeInSelectChange);
   timeOutSelect.addEventListener('change', onTimeOutSelectChange);
   roomNumberSelect.addEventListener('change', onNumberRoomsSelectChange);
+  formResetButton.addEventListener('click', onResetForms);
 };
 
 const removeFormEventListeners = () => {
@@ -126,6 +131,7 @@ const removeFormEventListeners = () => {
   timeInSelect.removeEventListener('change', onTimeInSelectChange);
   timeOutSelect.removeEventListener('change', onTimeOutSelectChange);
   roomNumberSelect.removeEventListener('change', onNumberRoomsSelectChange);
+  formResetButton.removeEventListener('click', onResetForms);
 };
 
 export const disableForm = () => {
