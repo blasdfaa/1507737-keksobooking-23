@@ -7,6 +7,7 @@ import { checkMaxLength } from './utils.js';
 
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
+
 const typeCategoryPriceValue = {
   BUNGALOW: 0,
   FLAT: 1000,
@@ -20,6 +21,7 @@ const ROOM_CAPACITY_VALUES = {
   3: [1, 2, 3],
   100: [0],
 };
+
 const adForm = document.querySelector('.ad-form');
 const adFormElements = [...adForm.children];
 
@@ -32,8 +34,6 @@ const timeOutSelect = adForm.querySelector('#timeout');
 const roomNumberSelect = adForm.querySelector('#room_number');
 const capacitySelect = adForm.querySelector('#capacity');
 const formResetButton = adForm.querySelector('.ad-form__reset');
-
-// Заголовок объявления
 
 const onTitleInputValid = () => {
   const valueLength = titleInput.value.length;
@@ -90,9 +90,7 @@ const onNumberRoomsSelectChange = (evt) => {
   });
 };
 
-export const onResetForms = (evt) => {
-  evt.preventDefault();
-
+export const onResetForms = () => {
   adForm.reset();
   resetFilterForm();
   resetFileInputs();

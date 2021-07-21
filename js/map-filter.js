@@ -70,12 +70,13 @@ const filterByFeatures = (sortItem) => {
   return selectedFeatures.every((feature) => features && features.includes(feature.value));
 };
 
-export const getFilterData = (offers) => offers.filter((item) =>
-  filterByHousingType(item) &&
-  filterByPrice(item) &&
-  filterByRooms(item) &&
-  filterByGuests(item) &&
-  filterByFeatures(item),
+export const getFilterData = (offers) => offers.filter(
+  (item) =>
+    filterByHousingType(item) &&
+    filterByPrice(item) &&
+    filterByRooms(item) &&
+    filterByGuests(item) &&
+    filterByFeatures(item),
 );
 
 export const resetFilterForm = () => {
