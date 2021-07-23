@@ -45,6 +45,8 @@ const onTitleInputValid = () => {
   } else {
     titleInput.setCustomValidity('');
   }
+
+  titleInput.reportValidity();
 };
 
 const onPriceInputValid = () => {
